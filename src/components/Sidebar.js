@@ -1,0 +1,34 @@
+import React from "react";
+import "./Sidebar.scss";
+import avatar from "../assets/images/avatar.png";
+import { Link } from "react-router-dom";
+
+const Sidebar = () => {
+  const username = "LDPH";
+
+  return (
+    <div className="sidebar">
+      <div className="sidebar-profile">
+        <img src={avatar} alt="User Avatar" className="avatar" />
+        <h3 className="username">{username}</h3>
+      </div>
+
+      <ul className="sidebar-menu">
+        <li>
+          <Link to="/camera-list">Xem danh sách camera</Link>
+        </li>
+        <li>
+          <Link to="/camera-history">Xem lịch sử camera</Link>
+        </li>
+        <li>
+          <Link to="/alert-history">Xem lịch sử cảnh báo</Link>
+        </li>
+        <li>
+          <Link to="/profile-edit">Chỉnh sửa thông tin cá nhân</Link>
+        </li>
+      </ul>
+    </div>
+  );
+};
+
+export default Sidebar;

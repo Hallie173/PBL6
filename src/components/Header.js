@@ -1,22 +1,23 @@
 import React from "react";
 import "./Header.scss";
+import logo from "../assets/images/logo.png";
 
 const Header = () => {
   return (
     <header className="header">
 
-      <div className="header__logo">
+      <div className="header-logo">
         <img
-          //src="/logo.png"
+          src={logo}
           alt="Logo"
-          className="header__logo-img"
+          className="header-logo-img"
         />
-        <h1 className="header__title">Fire Detection</h1>
+        <h1 className="header-title">Fire Detection</h1>
       </div>
 
-      <div className="header__buttons">
-        <button className="header__btn header__btn--outline">Đăng ký</button>
-        <button className="header__btn header__btn--primary">Đăng nhập</button>
+      <div className="header-buttons">
+        <button className="signup-button">Đăng ký</button>
+        <button className="login-button">Đăng nhập</button>
       </div>
     </header>
   );

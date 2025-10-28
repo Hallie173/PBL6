@@ -15,16 +15,13 @@ const Sidebar = () => {
 
       <ul className="sidebar-menu">
         <li>
-          <Link to="/camera-list">Xem danh sách camera</Link>
+          <Link to="/edit-profile">Chỉnh sửa thông tin cá nhân</Link>
         </li>
         <li>
           <Link to="/camera-history">Xem lịch sử camera</Link>
         </li>
         <li>
           <Link to="/alert-history">Xem lịch sử cảnh báo</Link>
-        </li>
-        <li>
-          <Link to="/profile-edit">Chỉnh sửa thông tin cá nhân</Link>
         </li>
       </ul>
     </div>

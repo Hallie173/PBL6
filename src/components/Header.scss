@@ -38,30 +38,30 @@
 
     .signup-button {
         padding: 8px 16px;
-        background-color: #007bff;
-        color: #fff;
-        border: 1px solid #007bff;
+        background-color: #000000;
+        color: #ffffff;
+        border: 1px solid #000000;
         border-radius: 4px;
         font-size: 16px;
         cursor: pointer;
 
         &:hover {
-            background-color: #0056b3;
+            color: #888888;
         }
     }
 
     .login-button {
         padding: 8px 16px;
         background-color: transparent;
-        color: #007bff;
-        border: 1px solid #007bff;
+        color: #000000;
+        border: 1px solid #000000;
         border-radius: 4px;
         font-size: 16px;
         cursor: pointer;
 
         &:hover {
-            color: #0056b3;
-            border: 1px solid #0056b3;
+            color: #888888;
+            border: 1px solid #888888;
         }
     }
   }

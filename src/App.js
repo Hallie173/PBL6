@@ -9,7 +9,9 @@ import {
 import Header from "./components/Header";
 import Homepage from "./Pages/Homepage";
 import Sidebar from "./components/Sidebar";
-import CameraList from "./Pages/CameraList";
+import CameraHistory from "./Pages/CameraHistory";
+import AlertHistory from "./Pages/AlertHistory";
+import EditProfile from "./Pages/EditProfile";
 
 function App() {
   return (
@@ -20,16 +22,9 @@ function App() {
           <Sidebar />
           <Routes>
             <Route path="/" element={<Homepage />} />
-            <Route path="/camera-list" element={<CameraList />} />
-            <Route path="/camera-history" element={<div>Lịch sử camera</div>} />
-            <Route
-              path="/alert-history"
-              element={<div>Lịch sử cảnh báo</div>}
-            />
-            <Route
-              path="/profile-edit"
-              element={<div>Chỉnh sửa thông tin</div>}
-            />
+            <Route path="/edit-profile" element={<EditProfile />} />
+            <Route path="/camera-history" element={<CameraHistory />} />
+            <Route path="/alert-history" element={<AlertHistory />} />
           </Routes>
         </Router>
       </div>

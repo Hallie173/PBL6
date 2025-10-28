@@ -7,23 +7,9 @@ const Homepage = () => {
       <h1>Home Page</h1>
       <div className="homepage-content">
         <div className="video-container">
-          <img
-            src="http://127.0.0.1:5000/video_feed"
-            alt="Fire detection stream"
-          />
+          <img src="http://127.0.0.1:5000/raw_video_feed" alt="Video Feed" />
         </div>
       </div>
-      <p>...</p>
-      <p>...</p>
-      <p>...</p>
-      <p>...</p>
-      <p>...</p>
-      <p>...</p>
-      <p>...</p>
-      <p>...</p>
-      <p>...</p>
-      <p>...</p>
-      <p>...</p>
     </div>
   );
 };

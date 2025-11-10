@@ -4,7 +4,7 @@ import axios from "axios";
 // 1. IMPORT FILE SCSS VÀO COMPONENT
 import "../styles/CameraFeed.scss";
 
-const API_URL = "http://localhost:5000/api/detect";
+const API_URL = "http://localhost:5000/api/detect_frame";
 const INTERVAL_MS = 500; // Tần suất gửi ảnh (2 frame/giây)
 
 function CameraFeed() {

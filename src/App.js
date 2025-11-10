@@ -6,29 +6,55 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
-import Header from "./components/Header";
 import Homepage from "./Pages/Homepage";
-import Sidebar from "./components/Sidebar";
 import CameraHistory from "./Pages/CameraHistory";
 import AlertHistory from "./Pages/AlertHistory";
 import EditProfile from "./Pages/EditProfile";
+import MainLayout from "./components/MainLayout";
+import LoginPage from "./Pages/LoginPage";
+import SignupPage from "./Pages/SignupPage";
 
 function App() {
   return (
-    <div className="App">
-      <div className="main-content">
-        <Router>
-          <Header />
-          <Sidebar />
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/edit-profile" element={<EditProfile />} />
-            <Route path="/camera-history" element={<CameraHistory />} />
-            <Route path="/alert-history" element={<AlertHistory />} />
-          </Routes>
-        </Router>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <MainLayout>
+              <Homepage />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/edit-profile"
+          element={
+            <MainLayout>
+              <EditProfile />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/camera-history"
+          element={
+            <MainLayout>
+              <CameraHistory />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/alert-history"
+          element={
+            <MainLayout>
+              <AlertHistory />
+            </MainLayout>
+          }
+        />
+
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+      </Routes>
+    </Router>
   );
 }
 

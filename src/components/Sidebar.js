@@ -2,6 +2,7 @@ import React from "react";
 import "./Sidebar.scss";
 import avatar from "../assets/images/avatar.png";
 import { Link } from "react-router-dom";
+import Footer from "./Footer";
 
 const Sidebar = () => {
   const username = "LDPH";
@@ -24,6 +25,9 @@ const Sidebar = () => {
           <Link to="/alert-history">Xem lịch sử cảnh báo</Link>
         </li>
       </ul>
+      <div className="sidebar-footer">
+        <Footer />
+      </div>
     </div>
   );
 };

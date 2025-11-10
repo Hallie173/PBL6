@@ -56,8 +56,12 @@ const EditProfile = () => {
             value={role}
             onChange={(e) => setRole(e.target.value)}
           >
-            <option value="Host">Host</option>
-            <option value="Member">Member</option>
+            <option className="option-field" value="Host">
+              Host
+            </option>
+            <option className="option-field" value="Member">
+              Member
+            </option>
           </select>
         </div>
         <div className="info-item">

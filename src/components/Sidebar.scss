@@ -11,6 +11,7 @@
   align-items: center;
   padding: 24px 0;
   box-shadow: 2px 0 6px rgba(0, 0, 0, 0.15);
+  box-sizing: border-box;
 
   .sidebar-profile {
     display: flex;
@@ -55,5 +56,14 @@
         }
       }
     }
+  }
+
+  .sidebar-footer {
+    position: absolute;
+    bottom: 15vh;
+    font-size: 12px;
+    margin: 0 10px;
+    color: #9ca3af;
+    text-align: center;
   }
 }

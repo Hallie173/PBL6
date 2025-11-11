@@ -4,34 +4,48 @@
   justify-content: center;
   min-height: 100vh;
   padding: 3rem 1.5rem;
-  background-color: #0f172a; // tương đương bg-slate-900
-  color: white;
+  background-color: #1f2937;
+  color: #f1f5f9;
+
+  .login-form {
+    width: 420px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
 }
 
 .login-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin: 0 auto;
 }
 
 .login-logo {
-  height: 40px;
-  width: auto;
+  width: 100px;
+  height: auto;
   margin: 0 auto;
 }
 
 .login-title {
-  margin-top: 2rem;
-  font-size: 1.5rem;
-  font-weight: bold;
+  margin: 10px auto;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1f2937;
 }
 
 .login-form-container {
-  margin: 0 auto;
-  max-width: 400px;
   width: 100%;
+  margin: 25px auto 0;
+  max-width: 400px;
+  background: #1f2937;
+  padding: 20px 10px;
+  border-radius: 8px;
 }
 
-.login-form {
+.login-form-content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;

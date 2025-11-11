@@ -33,6 +33,7 @@
 
   .header-buttons {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     gap: 12px;
 
@@ -43,6 +44,9 @@
         border: 1px solid #000000;
         border-radius: 4px;
         font-size: 16px;
+        text-decoration: none;
+        text-align: center;
+        white-space: nowrap;
         cursor: pointer;
 
         &:hover {
@@ -57,6 +61,9 @@
         border: 1px solid #000000;
         border-radius: 4px;
         font-size: 16px;
+        text-decoration: none;
+        text-align: center;
+        white-space: nowrap;
         cursor: pointer;
 
         &:hover {

@@ -22,6 +22,7 @@ const LoginPage = () => {
         alert("Login successfully!");
 
         localStorage.setItem("token", result.token);
+        localStorage.setItem("user", JSON.stringify(result.user));
 
         window.location.href = "/";
       } else {

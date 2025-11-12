@@ -1,13 +1,10 @@
-import logo from "./logo.svg";
 import "./App.css";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 import Homepage from "./Pages/Homepage";
-import CameraHistory from "./Pages/CameraHistory";
 import AlertHistory from "./Pages/AlertHistory";
 import EditProfile from "./Pages/EditProfile";
 import MainLayout from "./components/MainLayout";
@@ -31,14 +28,6 @@ function App() {
           element={
             <MainLayout>
               <EditProfile />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/camera-history"
-          element={
-            <MainLayout>
-              <CameraHistory />
             </MainLayout>
           }
         />

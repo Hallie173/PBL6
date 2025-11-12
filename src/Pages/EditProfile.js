@@ -1,50 +1,126 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./EditProfile.scss";
-import defaultAvatar from "../assets/images/avatar.png"; // Đổi đường dẫn theo dự án của bạn
+import defaultAvatar from "../assets/images/avatar.png";
 
 const EditProfile = () => {
   const [avatar, setAvatar] = useState(defaultAvatar);
-  const [username, setUsername] = useState("User123");
-  const [role, setRole] = useState("Administrator");
-  const [cameraName, setCameraName] = useState("Camera 1");
+  const [displayName, setDisplayName] = useState("");
+  const [role, setRole] = useState("");
+  const [email, setEmail] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
 
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setAvatar(URL.createObjectURL(file));
+  useEffect(() => {
+    const userInfo = localStorage.getItem("user");
+    if (userInfo) {
+      const user = JSON.parse(userInfo);
+      setDisplayName(user.displayName || "");
+      setRole(user.role || "");
+      setAvatar(user.avatar || defaultAvatar);
+      setEmail(user.email || "");
+    }
+  }, []);
+
+  const handleSendCode = async () => {
+    if (!newEmail) {
+      alert("Please enter your new email address first!");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:8080/api/send-verification-code",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: newEmail }),
+        }
+      );
+
+      const result = await response.json();
+      if (response.ok) {
+        alert("Verification code has been sent to your new email.");
+      } else {
+        alert(
+          `Error: ${result.message || "Failed to send verification code."}`
+        );
+      }
+    } catch (error) {
+      console.error("Error sending code:", error);
+      alert("Server error while sending verification code.");
     }
   };
 
-  const handleSave = () => {
-    alert("Profile saved successfully!");
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await fetch("http://localhost:8080/api/update-profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          displayName,
+          role,
+          newEmail,
+          verificationCode,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert("Profile updated successfully!");
+        localStorage.setItem("user", JSON.stringify(result.user));
+        window.location.reload();
+      } else {
+        alert(`Error: ${result.message || "Failed to update profile."}`);
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Server error while updating profile.");
+    }
   };
 
   return (
     <div className="edit-profile">
       <h1 className="title">Edit Profile</h1>
+
       <div className="avatar-section">
         <img src={avatar} alt="User Avatar" className="avatar-image" />
         <label htmlFor="avatarUpload" className="edit-avatar-btn">
           Edit Avatar
         </label>
         <input
-          className="input-field"
           id="avatarUpload"
           type="file"
           accept="image/*"
-          onChange={handleAvatarChange}
           style={{ display: "none" }}
         />
       </div>
 
       <div className="info-section">
+        {/* Current Email (readonly) */}
         <div className="info-item">
-          <label>Username</label>
+          <label>Current Email</label>
+          <input
+            className="input-field"
+            type="email"
+            value={email}
+            readOnly
+            disabled
+          />
+        </div>
+
+        <div className="info-item">
+          <label>Display Name</label>
           <input
             className="input-field"
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
           />
         </div>
 
@@ -52,26 +128,41 @@ const EditProfile = () => {
           <label>Role</label>
           <select
             className="input-field"
-            type="text"
             value={role}
             onChange={(e) => setRole(e.target.value)}
           >
-            <option className="option-field" value="Host">
-              Host
-            </option>
-            <option className="option-field" value="Member">
-              Member
-            </option>
+            <option value="Host">Host</option>
+            <option value="Member">Member</option>
           </select>
         </div>
+
         <div className="info-item">
-          <label>Camera name:</label>
+          <label>New Email</label>
+          <input
+            className="input-field"
+            type="email"
+            value={newEmail}
+            onChange={(e) => setNewEmail(e.target.value)}
+            placeholder="Enter new email"
+          />
+        </div>
+
+        <div className="info-item">
+          <label>Verification Code</label>
           <input
             className="input-field"
             type="text"
-            value={cameraName}
-            onChange={(e) => setCameraName(e.target.value)}
+            value={verificationCode}
+            onChange={(e) => setVerificationCode(e.target.value)}
+            placeholder="Enter verification code"
           />
+          <button
+            type="button"
+            className="send-code-btn"
+            onClick={handleSendCode}
+          >
+            Send Code
+          </button>
         </div>
       </div>
 

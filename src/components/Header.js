@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Header.scss";
 import logo from "../assets/images/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const [user, setUser] = React.useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userInfo = localStorage.getItem("user");
+
+    if (token && userInfo) {
+      setUser(JSON.parse(userInfo));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
+  };
+
   return (
     <header className="header">
       <Link to="/" className="header-logo">
@@ -12,12 +31,25 @@ const Header = () => {
       </Link>
 
       <div className="header-buttons">
-        <Link to="/signup" className="signup-button">
-          Sign Up
-        </Link>
-        <Link to="/login" className="login-button">
-          Log In
-        </Link>
+        {user ? (
+          <>
+            <span className="welcome-message">
+              Welcome, {user.displayName} ({user.role})
+            </span>
+            <button className="logout-button" onClick={handleLogout}>
+              Log Out
+            </button>
+          </>
+        ) : (
+          <>
+            <Link to="/signup" className="signup-button">
+              Sign Up
+            </Link>
+            <Link to="/login" className="login-button">
+              Log In
+            </Link>
+          </>
+        )}
       </div>
     </header>
   );

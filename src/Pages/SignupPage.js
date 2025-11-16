@@ -9,7 +9,6 @@ const SignUpPage = () => {
   const [displayName, setDisplayName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
 
   const handleSendCode = async () => {
@@ -56,7 +55,6 @@ const SignUpPage = () => {
       email,
       displayName,
       password,
-      role,
       verificationCode,
     };
 
@@ -71,10 +69,6 @@ const SignUpPage = () => {
 
       if (response.ok) {
         alert("Signup successful!");
-        localStorage.setItem("token", result.token);
-        localStorage.setItem("user", JSON.stringify(result.user));
-
-        window.location.href = "/";
       } else {
         const errorMessage =
           result.message || "Signup failed! Please try again!";
@@ -152,22 +146,6 @@ const SignUpPage = () => {
               />
             </div>
 
-            {/* Role Selection */}
-            <div className="form-group">
-              <label htmlFor="role">Role</label>
-              <select
-                id="role"
-                name="role"
-                required
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-              >
-                <option value="">Select your role</option>
-                <option value="host">Host</option>
-                <option value="member">Member</option>
-              </select>
-            </div>
-
             {/* Email Verifying Code */}
             <div className="form-group verify-group">
               <label htmlFor="verify-code">Email Verifying Code</label>
@@ -199,7 +177,7 @@ const SignUpPage = () => {
 
           <p className="login-link">
             Already have an account?{" "}
-            <Link to="/login" className="link">
+            <Link href="/login" className="link">
               Log in here
             </Link>
           </p>

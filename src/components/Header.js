@@ -33,9 +33,7 @@ const Header = () => {
       <div className="header-buttons">
         {user ? (
           <>
-            <span className="welcome-message">
-              Welcome, {user.displayName} ({user.role})
-            </span>
+            <span className="welcome-message">Welcome, {user.displayName}</span>
             <button className="logout-button" onClick={handleLogout}>
               Log Out
             </button>

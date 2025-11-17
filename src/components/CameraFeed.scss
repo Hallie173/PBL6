@@ -1,32 +1,98 @@
-// Định nghĩa các biến kích thước
-$video-width: 640px;
-$video-height: 480px;
-
-.camera-feed-container {
-  position: relative;
-  width: $video-width;
-  height: $video-height;
-  margin: 20px auto;
-
-  // Định dạng cho thẻ video
-  .video-stream {
-    // Lật ngang để người dùng nhìn thấy bản thân một cách tự nhiên
-    transform: scaleX(-1); 
-  }
-
-  // Định dạng cho Bounding Box
-  .bounding-box {
-    position: absolute;
-    border: 2px solid red;
-    color: white;
-    background-color: rgba(255, 0, 0, 0.3);
-    font-size: 12px;
-    text-align: center;
-    z-index: 10;
-  }
+.camera-feed-wrapper {
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 20px;
+background-color: #f7f7f7;
+border-radius: 12px;
+box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
-// Giữ canvas ẩn
+.title {
+color: #333;
+margin-bottom: 20px;
+}
+
+.camera-feed-container {
+position: relative;
+border-radius: 8px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.video-stream {
+display: block;
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
 .hidden-canvas {
-    display: none;
+display: none;
+}
+
+.bounding-box {
+position: absolute;
+box-sizing: border-box;
+font-size: 14px;
+font-weight: bold;
+z-index: 10;
+transition: all 0.1s ease-out;
+pointer-events: none;
+}
+
+.box-label {
+position: absolute;
+top: -20px;
+left: 0;
+padding: 2px 6px;
+border-radius: 4px 4px 0 0;
+color: white;
+font-size: 12px;
+line-height: 1;
+}
+
+
+.fire-box {
+border: 3px solid #ff4444;
+animation: pulse-fire 1s infinite alternate;
+}
+
+.fire-box .box-label {
+background-color: #ff4444;
+}
+
+
+.fall-box {
+border: 3px solid #44aaff;
+}
+
+.fall-box .box-label {
+background-color: #44aaff;
+}
+
+@keyframes pulse-fire {
+from {
+box-shadow: 0 0 5px #ff4444;
+}
+to {
+box-shadow: 0 0 15px #ff4444, 0 0 20px #ff9999;
+}
+}
+
+.detection-status {
+margin-top: 15px;
+text-align: center;
+font-family: monospace;
+font-size: 14px;
+}
+.status-active {
+color: #28a745;
+font-weight: bold;
+}
+.status-inactive {
+color: #ffc107;
+}
+.status-info {
+color: #6c757d;
+font-size: 12px;
 }

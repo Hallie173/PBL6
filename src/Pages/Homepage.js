@@ -5,7 +5,7 @@ import CameraFeed from "../components/CameraFeed";
 const Homepage = () => {
   return (
     <div className="homepage">
-      <h1>Home Page</h1>
+      <h1 className="title">AI Real-time Detection (Fire, Smoke, Fall)</h1>
       <div className="homepage-content">
         <CameraFeed />
       </div>

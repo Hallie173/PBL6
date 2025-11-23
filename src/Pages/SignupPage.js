@@ -69,6 +69,7 @@ const SignUpPage = () => {
 
       if (response.ok) {
         alert("Signup successful!");
+        window.location.href = "/";
       } else {
         const errorMessage =
           result.message || "Signup failed! Please try again!";
@@ -177,7 +178,7 @@ const SignUpPage = () => {
 
           <p className="login-link">
             Already have an account?{" "}
-            <Link href="/login" className="link">
+            <Link to="/login" className="link">
               Log in here
             </Link>
           </p>

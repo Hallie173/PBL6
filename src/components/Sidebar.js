@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
 import "./Sidebar.scss";
 import defaultAvatar from "../assets/images/avatar.png";
-import { Link } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import Footer from "./Footer";
 
 const Sidebar = () => {
   const [user, setUser] = useState(null);
-  const [avatar, setAvatar] = useState(defaultAvatar); // ✅ Đặt ở trên, đảm bảo được khởi tạo đầu tiên
+  const [avatar, setAvatar] = useState(defaultAvatar);
+  const location = useLocation();
+
+  const getLinkClass = (path) => {
+    return location.pathname === path ? "active" : "";
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -17,7 +22,6 @@ const Sidebar = () => {
         const parsedUser = JSON.parse(userInfo);
         setUser(parsedUser);
 
-        // Nếu có ảnh đại diện thì cập nhật, nếu không thì để mặc định
         if (parsedUser.avatar) {
           setAvatar(parsedUser.avatar);
         }
@@ -40,15 +44,33 @@ const Sidebar = () => {
         <>
           <ul className="sidebar-menu">
             <li>
-              <Link to="/edit-profile">Chỉnh sửa thông tin cá nhân</Link>
+              <NavLink
+                to="/"
+                className={({ isActive }) => (isActive ? "active" : "")}
+              >
+                Dashboard
+              </NavLink>
             </li>
             <li>
-              <Link to="/alert-history">Xem lịch sử cảnh báo</Link>
+              <NavLink
+                to="/edit-profile"
+                className={({ isActive }) => (isActive ? "active" : "")}
+              >
+                Profile
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                to="/alert-history"
+                className={({ isActive }) => (isActive ? "active" : "")}
+              >
+                History
+              </NavLink>
             </li>
           </ul>
         </>
       ) : (
-        <p className="not-logged-in">Vui lòng đăng nhập để xem nội dung</p>
+        <p className="not-logged-in">Please login for information!</p>
       )}
 
       <div className="sidebar-footer">

@@ -1,11 +1,8 @@
 import "./App.css";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Homepage from "./Pages/Homepage";
 import AlertHistory from "./Pages/AlertHistory";
+import AlertDetail from "./Pages/AlertDetail";
 import EditProfile from "./Pages/EditProfile";
 import MainLayout from "./components/MainLayout";
 import LoginPage from "./Pages/LoginPage";
@@ -36,6 +33,14 @@ function App() {
           element={
             <MainLayout>
               <AlertHistory />
+            </MainLayout>
+          }
+        />
+        <Route
+          path="/alert-detail/:id"
+          element={
+            <MainLayout>
+              <AlertDetail />
             </MainLayout>
           }
         />

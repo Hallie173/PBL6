@@ -15,7 +15,9 @@
 
         .alert-item {
             display: flex;
+            flex-direction: row;
             justify-content: space-between;
+            align-items: center;
             border: 1px solid rgba(31, 41, 55, 0.3);
             border-radius: 8px;
             padding: 10px 20px;
@@ -48,9 +50,11 @@
                     border: none;
                     border-radius: 8px;
                     font-weight: 600;
+                    font-size: 14px;
                     cursor: pointer;
                     transition: background 0.2s ease;
                     white-space: nowrap;
+                    text-decoration: none;
                 }
 
                 .btn-delete {
@@ -60,6 +64,7 @@
                     border: none;
                     border-radius: 8px;
                     font-weight: 600;
+                    font-size: 14px;
                     cursor: pointer;
                     transition: background 0.2s ease;
                     white-space: nowrap;

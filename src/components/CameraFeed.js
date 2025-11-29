@@ -9,38 +9,73 @@ const CAPTURE_DURATION_SEC = 10;
 const DEFAULT_WIDTH = 640;
 const DEFAULT_HEIGHT = 480;
 
-// Cooldown 30 giây giữa 2 alert liên tiếp của cùng loại
-const ALERT_COOLDOWN_MS = 30000;
-
 export default function CameraFeed() {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
 
-  // Detections render
+  const [alertLogs, setAlertLogs] = useState([]);
   const [detections, setDetections] = useState([]);
-
-  // Camera dimension
   const [videoDimensions, setVideoDimensions] = useState({
     width: 0,
     height: 0,
   });
 
-  // Đang record (UI)
+  // State quản lý việc đang ghi hình
   const [isRecording, setIsRecording] = useState(false);
 
-  // Khóa cứng, không phụ thuộc vào React re-render
+  // Khóa logic để tránh trigger trùng lặp khi đang xử lý
   const isLockedRef = useRef(false);
 
-  // Lưu cooldown cho từng loại sự kiện
-  const lastAlertTimestamp = useRef({
-    FIRE: 0,
-    FALL: 0,
-  });
+  // ==========================================
+  // 1. CHỨC NĂNG ÂM THANH (3 BÍP)
+  // ==========================================
+  const playAlertSound = () => {
+    // Kiểm tra trình duyệt có hỗ trợ không
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
 
-  // ================================
-  // 1. SETUP CAMERA
-  // ================================
+    const ctx = new AudioContext();
+
+    // Hàm tạo 1 tiếng bíp ngắn
+    const beep = (startTime) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.type = "sine"; // Sóng hình sin (nghe êm hơn square)
+      osc.frequency.value = 880; // Tần số 880Hz (Nốt La cao - nghe rõ ràng)
+
+      // Bắt đầu bíp
+      osc.start(startTime);
+
+      // Tắt sau 100ms (Bíp ngắn)
+      osc.stop(startTime + 0.1);
+
+      // Hiệu ứng fade out để không bị tiếng "bụp"
+      gain.gain.setValueAtTime(1, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.1);
+    };
+
+    const now = ctx.currentTime;
+
+    // YÊU CẦU: 3 tiếng bíp trong 1s, lặp lại 2 lần (Tổng 2s)
+    // Chu kỳ 1 (Giây thứ 0)
+    beep(now); // Bíp 1
+    beep(now + 0.2); // Bíp 2 (cách 200ms)
+    beep(now + 0.4); // Bíp 3 (cách 200ms)
+
+    // Chu kỳ 2 (Giây thứ 1)
+    beep(now + 1.0); // Bíp 1
+    beep(now + 1.2); // Bíp 2
+    beep(now + 1.4); // Bíp 3
+  };
+
+  // ==========================================
+  // 2. SETUP CAMERA
+  // ==========================================
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({ video: { width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT } })
@@ -55,9 +90,7 @@ export default function CameraFeed() {
           };
         }
       })
-      .catch((err) =>
-        alert("Không thể truy cập camera. Kiểm tra quyền truy cập.")
-      );
+      .catch((err) => alert("Không thể truy cập camera!"));
 
     return () => {
       if (videoRef.current?.srcObject) {
@@ -67,14 +100,28 @@ export default function CameraFeed() {
   }, []);
 
   // ==========================================
-  // 2. CAPTURE EVIDENCE (10 images / 10 secs)
+  // 3. CAPTURE EVIDENCE SEQUENCE
   // ==========================================
   const captureEvidenceSequence = async (triggerType, userID) => {
     setIsRecording(true);
-    console.log(`📸 Bắt đầu chuỗi bằng chứng: ${triggerType}`);
 
-    const sessionID = Date.now();
+    // Kích hoạt âm thanh ngay khi bắt đầu alert
+    playAlertSound();
 
+    // Tạo Log mới
+    const alertId = Date.now();
+    const newLog = {
+      id: alertId,
+      time: new Date().toLocaleTimeString("vi-VN"),
+      message: "Saving evidence...",
+      status: "recording",
+      type: triggerType,
+    };
+    setAlertLogs((prev) => [newLog, ...prev]);
+
+    const sessionID = alertId;
+
+    // Chụp 10 ảnh trong 10 giây
     for (let i = 0; i < CAPTURE_DURATION_SEC; i++) {
       if (!videoRef.current || !canvasRef.current) break;
 
@@ -92,22 +139,27 @@ export default function CameraFeed() {
           sequenceIndex: i + 1,
           timestamp: Date.now(),
         });
-
-        console.log(`📤 Đã gửi ảnh bằng chứng ${i + 1}/10`);
       } catch (error) {
-        console.error("Lỗi gửi ảnh bằng chứng:", error);
+        console.error("Image sending error:", error);
       }
 
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 
-    console.log("✅ Hoàn tất bằng chứng.");
+    // Cập nhật Log thành công
+    setAlertLogs((prevLogs) =>
+      prevLogs.map((log) =>
+        log.id === alertId
+          ? { ...log, message: "Evidence saved!", status: "done" }
+          : log
+      )
+    );
     setIsRecording(false);
   };
 
-  // ================================================
-  // 3. AI LOOP – gửi frame lên Flask mỗi 500ms
-  // ================================================
+  // ==========================================
+  // 4. AI LOOP (SỬA ĐỔI QUAN TRỌNG)
+  // ==========================================
   useEffect(() => {
     if (videoDimensions.width === 0) return;
 
@@ -117,14 +169,12 @@ export default function CameraFeed() {
 
       if (!video || !canvas || video.readyState !== 4) return;
 
-      // Vẽ video vào canvas
       canvas.width = videoDimensions.width;
       canvas.height = videoDimensions.height;
       const ctx = canvas.getContext("2d");
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       const imageData = canvas.toDataURL("image/jpeg", 0.5);
 
-      // LẤY USER ID
       let currentUserID = null;
       const userStr = localStorage.getItem("user");
       if (userStr) {
@@ -134,11 +184,7 @@ export default function CameraFeed() {
           currentUserID = userStr;
         }
       }
-
-      if (!currentUserID) {
-        console.warn("Không tìm thấy userID");
-        return;
-      }
+      if (!currentUserID) return;
 
       try {
         const response = await axios.post(FLASK_API_URL, {
@@ -146,60 +192,43 @@ export default function CameraFeed() {
           userID: currentUserID,
         });
 
-        const currentDetections = response.data.detections || [];
-        setDetections(currentDetections);
+        // Cập nhật bounding box để vẽ
+        setDetections(response.data.detections || []);
 
-        // Nếu đang record → không trigger alert mới
-        if (isLockedRef.current) return;
+        // --- LOGIC MỚI: Chỉ Alert khi Server bảo thế ---
+        const serverTrigger = response.data.alert_trigger; // Nhận cờ từ Python
 
-        // Tìm Fire/Fall
-        const danger = currentDetections.find((d) =>
-          ["FIRE", "FALL"].includes(d.label.toUpperCase())
-        );
+        if (serverTrigger && !isLockedRef.current) {
+          console.log("🚨 SERVER CONFIRMED ALERT:", serverTrigger);
 
-        if (danger) {
-          const type = danger.label.toUpperCase();
+          isLockedRef.current = true; // Khóa lại
 
-          // Cooldown 30s
-          const now = Date.now();
-          if (now - lastAlertTimestamp.current[type] < ALERT_COOLDOWN_MS) {
-            console.log(`⏳ ${type} còn cooldown, bỏ qua.`);
-            return;
-          }
-
-          // KÍCH HOẠT ALERT
-          isLockedRef.current = true; // khóa ngay lập tức
-          lastAlertTimestamp.current[type] = now;
-
-          captureEvidenceSequence(type, currentUserID).finally(() => {
-            isLockedRef.current = false; // mở khóa sau chuỗi
+          captureEvidenceSequence(serverTrigger, currentUserID).finally(() => {
+            isLockedRef.current = false; // Mở khóa sau khi xong 10s
           });
         }
       } catch (e) {
-        console.error("API Flask error", e);
+        console.error("API Error", e);
       }
     }, INTERVAL_MS);
 
     return () => clearInterval(interval);
   }, [videoDimensions]);
 
-  // =======================================
-  // 4. DRAW BOXES
-  // =======================================
+  // ==========================================
+  // 5. DRAW BOXES & RENDER (Giữ nguyên)
+  // ==========================================
   const drawBoxes = () => {
     if (!detections.length || !containerRef.current) return null;
-
     const displayWidth = containerRef.current.offsetWidth;
     const displayHeight = containerRef.current.offsetHeight;
     const { width: originalWidth, height: originalHeight } = videoDimensions;
-
     const scaleX = displayWidth / originalWidth;
     const scaleY = displayHeight / originalHeight;
 
     return detections.map((det, i) => {
       const [x1, y1, x2, y2] = det.box;
       const label = det.label.toUpperCase();
-
       const classMap = {
         FIRE: "fire-box",
         SMOKE: "smoke-box",
@@ -226,40 +255,73 @@ export default function CameraFeed() {
   };
 
   return (
-    <div className="camera-feed-wrapper">
-      <div
-        ref={containerRef}
-        className="camera-feed-container"
-        style={{ width: `${DEFAULT_WIDTH}px`, height: `${DEFAULT_HEIGHT}px` }}
-      >
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          playsInline
-          width={DEFAULT_WIDTH}
-          height={DEFAULT_HEIGHT}
-          className="video-stream"
-        />
-        {drawBoxes()}
-        {isRecording && (
-          <div className="recording-indicator">
-            🔴 Đang lưu bằng chứng...
-          </div>
-        )}
+    <div className="camera-layout">
+      <div className="camera-feed-wrapper">
+        <div
+          ref={containerRef}
+          className="camera-feed-container"
+          style={{
+            width: videoDimensions.width
+              ? `${videoDimensions.width * 1.1}px`
+              : `${DEFAULT_WIDTH}px`,
+            height: videoDimensions.height
+              ? `${videoDimensions.height * 1.1}px`
+              : `${DEFAULT_HEIGHT}px`,
+          }}
+        >
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            playsInline
+            width={videoDimensions.width * 1.1 || DEFAULT_WIDTH}
+            height={videoDimensions.height * 1.1 || DEFAULT_HEIGHT}
+            className="video-stream"
+          />
+          {drawBoxes()}
+        </div>
+        <canvas ref={canvasRef} className="hidden-canvas" />
       </div>
 
-      <canvas ref={canvasRef} className="hidden-canvas" />
-
-      <div className="detection-status">
-        {detections.length ? (
-          <p className="status-active">
-            ✅ Phát hiện {detections.length} đối tượng
-          </p>
-        ) : (
-          <p className="status-inactive">⏳ Đang chờ phát hiện...</p>
-        )}
-        <p className="status-info">API URL: {FLASK_API_URL}</p>
+      <div className="info-sidebar">
+        <h3 className="sidebar-title">SECURITY MONITOR</h3>
+        <div className="status-section">
+          {detections.length ? (
+            <p className="status-text status-active">
+              ✅ Detected {detections.length} objects.
+            </p>
+          ) : (
+            <p className="status-text status-inactive">
+              ⏳ Waiting for detections...
+            </p>
+          )}
+        </div>
+        <div className="alert-list-container">
+          <ul className="alert-list">
+            {alertLogs.map((log) => (
+              <li key={log.id} className="alert-item">
+                <span className="alert-time">[{log.time}]</span>
+                <span
+                  className={
+                    log.status === "recording"
+                      ? "dot-indicator dot-recording"
+                      : "dot-indicator"
+                  }
+                ></span>
+                <span
+                  className={`alert-msg ${
+                    log.status === "done" ? "alert-msg-done" : ""
+                  }`}
+                >
+                  {log.message}
+                </span>
+              </li>
+            ))}
+            {alertLogs.length === 0 && (
+              <li className="alert-empty">No alert recorded.</li>
+            )}
+          </ul>
+        </div>
       </div>
     </div>
   );

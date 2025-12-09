@@ -67,7 +67,11 @@ const LoginPage = () => {
                 <label htmlFor="password" className="form-label">
                   Password
                 </label>
-                <Link to="/forgotpassword" className="forgot-password">
+                <Link
+                  to="/reset-password"
+                  state={{ email: email }}
+                  className="forgot-password"
+                >
                   Forgot password?
                 </Link>
               </div>

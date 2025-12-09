@@ -27,7 +27,8 @@ const Header = () => {
     <header className="header">
       <Link to="/" className="header-logo">
         <img src={logo} alt="Logo" className="header-logo-img" />
-        <h1 className="header-title">Abnormal Situation Detection</h1>
+        <div className="header-title">VisionGuard</div>
+        <div className="header-subtitle">Abnormal Situation Detection</div>
       </Link>
 
       <div className="header-buttons">

@@ -4,11 +4,12 @@ import axios from "axios";
 import "./AlertDetail.scss";
 
 const SERVER_URL = "http://localhost:8080/";
+const API_BASE_URL = "http://localhost:8080/api/alerts";
 
 const AlertDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [alerts, setAlerts] = useState([]);
   const [alertData, setAlertData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -33,6 +34,35 @@ const AlertDetail = () => {
       navigate("/history");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (alertID) => {
+    if (!window.confirm("Do you want to permanently delete this alert?")) {
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.delete(`${API_BASE_URL}/${alertID}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.data.ok) {
+        setAlerts((prevAlerts) =>
+          prevAlerts.filter((alert) => alert.alertID !== alertID)
+        );
+
+        alert("Alert deleted!");
+      } else {
+        alert("Error deleting alert.");
+      }
+
+      window.location.href = "/alert-history";
+    } catch (err) {
+      console.error("Delete error:", err);
+      alert("An error occurred while deleting the alert.");
     }
   };
 
@@ -109,6 +139,14 @@ const AlertDetail = () => {
             </tr>
           </tbody>
         </table>
+        <div className="action-button">
+          <button
+            className="btn-delete"
+            onClick={() => handleDelete(alertData.alertID)}
+          >
+            Delete
+          </button>
+        </div>
       </div>
 
       <h3 className="section-title">

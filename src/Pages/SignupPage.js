@@ -19,7 +19,7 @@ const SignUpPage = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/send-verification-code",
+        "http://103.90.225.223:8080/api/send-verification-code",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -59,7 +59,7 @@ const SignUpPage = () => {
     };
 
     try {
-      const response = await fetch("http://localhost:8080/api/signup", {
+      const response = await fetch("http://103.90.225.223:8080/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

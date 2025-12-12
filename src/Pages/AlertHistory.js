@@ -3,7 +3,7 @@ import axios from "axios";
 import "./AlertHistory.scss";
 import { Link } from "react-router-dom";
 
-const API_BASE_URL = "http://localhost:8080/api/alerts";
+const API_BASE_URL = "http://103.90.225.223:8080/api/alerts";
 
 function AlertHistory() {
   const [alerts, setAlerts] = useState([]);

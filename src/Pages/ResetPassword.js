@@ -29,7 +29,7 @@ const ResetPassword = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/send-verification-code",
+        "http://103.90.225.223:8080/api/send-verification-code",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -74,11 +74,14 @@ const ResetPassword = () => {
 
     try {
       // Giả định API endpoint là /api/reset-password
-      const response = await fetch("http://localhost:8080/api/reset-password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "http://103.90.225.223:8080/api/reset-password",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
 
       const result = await response.json();
 

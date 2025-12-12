@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./AlertDetail.scss";
 
-const SERVER_URL = "http://localhost:8080/";
-const API_BASE_URL = "http://localhost:8080/api/alerts";
+const SERVER_URL = "http://103.90.225.223:8080/";
+const API_BASE_URL = "http://103.90.225.223:8080/api/alerts";
 
 const AlertDetail = () => {
   const { id } = useParams();
@@ -22,9 +22,12 @@ const AlertDetail = () => {
   const fetchAlertDetail = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(`http://localhost:8080/api/alerts/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        `http://103.90.225.223:8080/api/alerts/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (res.data.ok) {
         setAlertData(res.data.alert);
       }

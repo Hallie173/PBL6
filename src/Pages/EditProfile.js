@@ -39,7 +39,7 @@ const EditProfile = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8080/api/send-verification-code",
+        "http://103.90.225.223:8080/api/send-verification-code",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -82,14 +82,17 @@ const EditProfile = () => {
         formData.append("avatar", fileAvatar);
       }
 
-      const response = await fetch("http://localhost:8080/api/update-profile", {
-        method: "PUT",
-        headers: {
-          // QUAN TRỌNG: KHÔNG ĐẶT "Content-Type" KHI DÙNG FormData
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData, // Gửi FormData object
-      });
+      const response = await fetch(
+        "http://103.90.225.223:8080/api/update-profile",
+        {
+          method: "PUT",
+          headers: {
+            // QUAN TRỌNG: KHÔNG ĐẶT "Content-Type" KHI DÙNG FormData
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData, // Gửi FormData object
+        }
+      );
 
       const result = await response.json();
 

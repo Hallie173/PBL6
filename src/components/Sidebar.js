@@ -53,7 +53,7 @@ const Sidebar = () => {
             </li>
             <li>
               <NavLink
-                to="/edit-profile"
+                to="/update-profile"
                 className={({ isActive }) => (isActive ? "active" : "")}
               >
                 Profile

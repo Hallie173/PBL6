@@ -3,7 +3,7 @@ import axios from "axios";
 import "./AlertHistory.scss";
 import { Link } from "react-router-dom";
 
-const API_BASE_URL = "https://doan-pbl6-ha.duckdns.org/api/alerts";
+const API_BASE_URL = "https://sip-in-ease.duckdns.org/api/alerts";
 
 function AlertHistory() {
   const [alerts, setAlerts] = useState([]);

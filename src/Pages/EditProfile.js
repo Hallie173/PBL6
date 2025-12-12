@@ -39,7 +39,7 @@ const EditProfile = () => {
 
     try {
       const response = await fetch(
-        "https://doan-pbl6-ha.duckdns.org/api/send-verification-code",
+        "https://sip-in-ease.duckdns.org/api/send-verification-code",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -83,7 +83,7 @@ const EditProfile = () => {
       }
 
       const response = await fetch(
-        "https://doan-pbl6-ha.duckdns.org/api/update-profile",
+        "https://sip-in-ease.duckdns.org/api/update-profile",
         {
           method: "PUT",
           headers: {

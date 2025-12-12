@@ -11,7 +11,7 @@ const LoginPage = () => {
 
     try {
       const response = await fetch(
-        "https://doan-pbl6-ha.duckdns.org/api/login",
+        "https://sip-in-ease.duckdns.org/api/login",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

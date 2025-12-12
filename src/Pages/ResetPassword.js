@@ -29,7 +29,7 @@ const ResetPassword = () => {
 
     try {
       const response = await fetch(
-        "https://doan-pbl6-ha.duckdns.org/api/send-verification-code",
+        "https://sip-in-ease.duckdns.org/api/send-verification-code",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -75,7 +75,7 @@ const ResetPassword = () => {
     try {
       // Giả định API endpoint là /api/reset-password
       const response = await fetch(
-        "https://doan-pbl6-ha.duckdns.org/api/reset-password",
+        "https://sip-in-ease.duckdns.org/api/reset-password",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

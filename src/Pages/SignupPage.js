@@ -19,7 +19,7 @@ const SignUpPage = () => {
 
     try {
       const response = await fetch(
-        "https://doan-pbl6-ha.duckdns.org/api/send-verification-code",
+        "https://sip-in-ease.duckdns.org/api/send-verification-code",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -60,7 +60,7 @@ const SignUpPage = () => {
 
     try {
       const response = await fetch(
-        "https://doan-pbl6-ha.duckdns.org/api/signup",
+        "https://sip-in-ease.duckdns.org/api/signup",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

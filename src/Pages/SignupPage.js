@@ -19,7 +19,7 @@ const SignUpPage = () => {
 
     try {
       const response = await fetch(
-        "http://103.90.225.223:8080/api/send-verification-code",
+        "https://doan-pbl6-ha.duckdns.org/api/send-verification-code",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -59,11 +59,14 @@ const SignUpPage = () => {
     };
 
     try {
-      const response = await fetch("http://103.90.225.223:8080/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "https://doan-pbl6-ha.duckdns.org/api/signup",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
 
       const result = await response.json();
 

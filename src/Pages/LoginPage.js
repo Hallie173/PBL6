@@ -10,11 +10,14 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://103.90.225.223:8080/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        "https://doan-pbl6-ha.duckdns.org/api/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const result = await response.json();
 

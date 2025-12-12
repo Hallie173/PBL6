@@ -4,7 +4,7 @@ import axios from "axios";
 export const DetectionContext = createContext();
 
 const FLASK_API_URL = "http://103.90.225.223:5000/api/detect_frame";
-const NODE_API_URL = "http://103.90.225.223:8080/api/alerts/evidence";
+const NODE_API_URL = "https://doan-pbl6-ha.duckdns.org/api/alerts/evidence";
 const INTERVAL_MS = 500;
 const CAPTURE_DURATION_SEC = 10;
 const DEFAULT_WIDTH = 640;
